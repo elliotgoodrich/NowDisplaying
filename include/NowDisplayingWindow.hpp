@@ -23,13 +23,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef INCLUDE_GUARD_0919F3B3_2FDE_4623_AED9_AFF2F50E2C30
 #define INCLUDE_GUARD_0919F3B3_2FDE_4623_AED9_AFF2F50E2C30
 
+#include "QtPtr.hpp"
+#include "VlcStatus.hpp"
+
+#include <QLabel>
 #include <QMainWindow>
+#include <QSize>
+#include <QTimer>
+
+class QGridLayout;
 
 namespace nd {
 
 class NowDisplayingWindow : public QMainWindow {
 public:
-explicit NowDisplayingWindow(QWidget* parent);
+	explicit NowDisplayingWindow(QWidget* parent);
+
+private Q_SLOTS:
+	void update();
+
+private:
+	VlcStatus m_vlc;
+	QGridLayout* m_detail_layout;
+	QtPtr<QLabel> m_title, m_artist, m_album, m_description, m_album_art;
+	QTimer m_timer;
+	QSize m_image_size;
 };
 
 }

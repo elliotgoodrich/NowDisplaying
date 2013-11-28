@@ -39,6 +39,11 @@ namespace nd {
 template <typename T>
 class QtPtr {
 public:
+	/** Don't manage any pointer. */
+	QtPtr()
+	: m_ptr{nullptr} {
+	}
+
 	/** Construct a QtPtr object from T. */
 	QtPtr(T* ptr)
 	: m_ptr{ptr} {

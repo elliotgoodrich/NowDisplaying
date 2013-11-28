@@ -29,12 +29,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPixmap>
 #include <QString>
 #include <QWidget>
+#include <QUrl>
 
 namespace nd {
 
 NowDisplayingWindow::NowDisplayingWindow(QWidget* parent)
-: QMainWindow{parent} {
+: QMainWindow{parent}
+, m_vlc{QUrl{"http://localhost:8080/requests/status.xml"}, "", "password"}
+, m_title{make_qt<QLabel>("")}
+, m_artist{make_qt<QLabel>("")}
+, m_album{make_qt<QLabel>("")}
+, m_description{make_qt<QLabel>("")}
+, m_album_art{make_qt<QLabel>("")}
+, m_image_size{100, 100} {
+
 	setWindowFlags(Qt::FramelessWindowHint);
+
+	auto stylesheet = QString("QLabel { color: #ffffff }"
+	                          "QMainWindow { background-color: #000000 }");
+	setStyleSheet(stylesheet);
+
+	connect(&m_vlc, &VlcStatus::updated, this, &NowDisplayingWindow::update);
+	connect(&m_timer, &QTimer::timeout, &m_vlc, &VlcStatus::update);
 
 	auto central_widget = make_qt<QWidget>();
 	setCentralWidget(central_widget);
@@ -43,39 +59,52 @@ NowDisplayingWindow::NowDisplayingWindow(QWidget* parent)
 	central_widget->setLayout(hlayout);
 
 	auto image = QPixmap{100, 100};
-	image.fill(Qt::red);
+	image.fill(Qt::black);
 
-	auto image_widget = make_qt<QLabel>();
-	image_widget->setPixmap(image);
+	m_album_art = make_qt<QLabel>();
+	m_album_art->setPixmap(image);
 
-	hlayout->addWidget(image_widget);
+	hlayout->addWidget(m_album_art);
 
 	auto detail_widget = make_qt<QWidget>();
-	auto detail_layout = make_qt<QGridLayout>();
-	detail_widget->setLayout(detail_layout);
+	m_detail_layout = make_qt<QGridLayout>();
+	detail_widget->setLayout(m_detail_layout);
 	hlayout->addWidget(detail_widget);
 
-	auto track_label   = make_qt<QLabel>("Track: ");
-	auto track_details = make_qt<QLabel>("Track Name");
+	auto title_label  = make_qt<QLabel>("Title: ");
+	auto artist_label = make_qt<QLabel>("Artist: ");
+	auto album_label  = make_qt<QLabel>("Album: ");
+	auto desc_label   = make_qt<QLabel>("Desc: ");
 
-	auto artist_label   = make_qt<QLabel>("Artist: ");
-	auto artist_details = make_qt<QLabel>("Artist Name");
+	m_detail_layout->addWidget(title_label, 0, 0);
+	m_detail_layout->addWidget(artist_label, 1, 0);
+	m_detail_layout->addWidget(album_label, 2, 0);
+	m_detail_layout->addWidget(desc_label, 3, 0);
 
-	auto album_label   = make_qt<QLabel>("Album: ");
-	auto album_details = make_qt<QLabel>("Album Name");
+	m_detail_layout->addWidget(m_title, 0, 1);
+	m_detail_layout->addWidget(m_artist, 1, 1);
+	m_detail_layout->addWidget(m_album, 2, 1);
+	m_detail_layout->addWidget(m_description, 3, 1);
 
-	auto license_label   = make_qt<QLabel>("License: ");
-	auto license_details = make_qt<QLabel>("License Name");
+	m_vlc.update();
 
-	detail_layout->addWidget(track_label,   0, 0);
-	detail_layout->addWidget(artist_label,  1, 0);
-	detail_layout->addWidget(album_label,   2, 0);
-	detail_layout->addWidget(license_label, 3, 0);
+	m_timer.start(100);
+}
 
-	detail_layout->addWidget(track_details,   0, 1);
-	detail_layout->addWidget(artist_details,  1, 1);
-	detail_layout->addWidget(album_details,   2, 1);
-	detail_layout->addWidget(license_details, 3, 1);
+void NowDisplayingWindow::update() {
+	m_title->setText(m_vlc.title());
+	m_artist->setText(m_vlc.artist());
+	m_album->setText(m_vlc.album());
+	m_description->setText(m_vlc.description());
+
+	auto album_art = QPixmap{m_vlc.album_art().absoluteFilePath()};
+	if(album_art.isNull()) {
+		album_art = QPixmap{m_image_size};
+		album_art.fill(Qt::black);
+	} else {
+		album_art = album_art.scaled(m_image_size);
+	}
+	m_album_art->setPixmap(album_art);
 }
 
 }
