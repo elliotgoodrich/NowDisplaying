@@ -47,7 +47,7 @@ namespace nd {
 
 NowDisplayingWindow::NowDisplayingWindow(QWidget* parent)
 : QMainWindow{parent}
-, m_settings{QDir::currentPath() + "settings.ini"}
+, m_settings{QDir::currentPath() + "/settings.ini"}
 , m_vlc{m_settings.vlc_address(), m_settings.vlc_user(), m_settings.vlc_password()}
 , m_title{make_qt<QLabel>("")}
 , m_artist{make_qt<QLabel>("")}
