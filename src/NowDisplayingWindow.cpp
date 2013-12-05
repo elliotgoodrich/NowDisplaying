@@ -60,6 +60,8 @@ NowDisplayingWindow::NowDisplayingWindow(QWidget* parent)
 , m_current_theme{m_settings.theme()}
 , m_current_app{m_settings.application()} {
 
+	setObjectName("Display");
+
 	setWindowFlags(Qt::FramelessWindowHint);
 	set_theme(m_settings.theme());
 	set_on_top(m_settings.on_top());
@@ -237,7 +239,7 @@ void NowDisplayingWindow::show_context_menu(const QPoint& pos) {
 }
 
 void NowDisplayingWindow::show_settings() {
-	SettingsDialog dialog{m_vlc.address(), m_vlc.user(), m_vlc.password(), this};
+	SettingsDialog dialog{m_vlc.address(), m_vlc.user(), m_vlc.password()};
 	if(dialog.exec() == QDialog::Accepted) {
 		m_vlc.change_details(dialog.vlc_address(), dialog.vlc_user(), dialog.vlc_password());
 	}

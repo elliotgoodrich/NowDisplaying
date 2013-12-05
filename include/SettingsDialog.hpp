@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDialog>
 #include <QGroupBox>
+#include <QGridLayout>
 #include <QLineEdit>
 #include <QVBoxLayout>
 
@@ -35,16 +36,16 @@ namespace nd {
 
 class SettingsDialog : public QDialog {
 public:
-	explicit SettingsDialog(QUrl const& url, QString const& user, QString const& password,
-	                        QWidget* parent);
+	SettingsDialog(QUrl const& url, QString const& user, QString const& password);
 
 	QString vlc_user() const;
 	QString vlc_password() const;
 	QUrl vlc_address() const;
 
 private:
-	QGroupBox m_setting_box, m_vlc_box;
-	QVBoxLayout m_top_layout, m_setting_layout, m_vlc_layout;
+	QGroupBox m_vlc_box;
+	QVBoxLayout m_top_layout;
+	QGridLayout m_vlc_layout;
 	QLineEdit m_vlc_user, m_vlc_password, m_vlc_url;
 };
 

@@ -24,30 +24,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "QtPtr.hpp"
 
 #include <QDialogButtonBox>
+#include <QLabel>
 #include <QString>
 #include <QUrl>
 
 namespace nd {
 
-SettingsDialog::SettingsDialog(QUrl const& url, QString const& user, QString const& password,
-                               QWidget* parent)
-: QDialog(parent)
-, m_setting_box{"Main Settings"}
-, m_vlc_box{"VLC Settings"}
+SettingsDialog::SettingsDialog(QUrl const& url, QString const& user, QString const& password)
+: m_vlc_box{"VLC Settings"}
 , m_vlc_user{user}
 , m_vlc_password{password}
 , m_vlc_url{url.toString(QUrl::None)} {
 
+	m_vlc_user.setFixedWidth(200);
+	m_vlc_password.setFixedWidth(200);
+	m_vlc_url.setFixedWidth(200);
+
 	setLayout(&m_top_layout);
-	m_top_layout.addWidget(&m_setting_box);
 	m_top_layout.addWidget(&m_vlc_box);
 
-	m_setting_box.setLayout(&m_setting_layout);
-
 	m_vlc_box.setLayout(&m_vlc_layout);
-	m_vlc_layout.addWidget(&m_vlc_url);
-	m_vlc_layout.addWidget(&m_vlc_user);
-	m_vlc_layout.addWidget(&m_vlc_password);
+	m_vlc_layout.addWidget(make_qt<QLabel>("Url:"), 0, 0);
+	m_vlc_layout.addWidget(&m_vlc_url, 0, 1);
+
+	m_vlc_layout.addWidget(make_qt<QLabel>("User:"), 1, 0);
+	m_vlc_layout.addWidget(&m_vlc_user, 1, 1);
+
+	m_vlc_layout.addWidget(make_qt<QLabel>("Password:"), 2, 0);
+	m_vlc_layout.addWidget(&m_vlc_password, 2, 1);
 
 	auto buttons = make_qt<QDialogButtonBox>(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	m_top_layout.addWidget(buttons);
