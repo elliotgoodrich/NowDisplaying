@@ -94,7 +94,7 @@ void Settings::set_vlc_password(QString const& password) {
 }
 
 QUrl Settings::vlc_address() const {
-	return m_settings.value("VlcAddress", "http://localhost:8080/request/status.xml").toUrl();
+	return m_settings.value("VlcAddress", QUrl{"http://localhost:8080/request/status.xml"}).toUrl();
 }
 
 void Settings::set_vlc_address(QUrl const& address) {

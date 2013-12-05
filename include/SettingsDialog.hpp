@@ -45,7 +45,7 @@ public:
 private:
 	QGroupBox m_setting_box, m_vlc_box;
 	QVBoxLayout m_top_layout, m_setting_layout, m_vlc_layout;
-	QLineEdit m_vlc_user, m_vlc_password, m_vlc_host, m_vlc_port;
+	QLineEdit m_vlc_user, m_vlc_password, m_vlc_url;
 };
 
 

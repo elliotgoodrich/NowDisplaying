@@ -24,7 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "QtPtr.hpp"
 
 #include <QDialogButtonBox>
-#include <QIntValidator>
 #include <QString>
 #include <QUrl>
 
@@ -37,11 +36,7 @@ SettingsDialog::SettingsDialog(QUrl const& url, QString const& user, QString con
 , m_vlc_box{"VLC Settings"}
 , m_vlc_user{user}
 , m_vlc_password{password}
-, m_vlc_host{url.host()}
-, m_vlc_port{QString::number(url.port())} {
-
-	auto validator = make_qt<QIntValidator>(0, 99999);
-	m_vlc_port.setValidator(validator);
+, m_vlc_url{url.toString(QUrl::None)} {
 
 	setLayout(&m_top_layout);
 	m_top_layout.addWidget(&m_setting_box);
@@ -50,8 +45,7 @@ SettingsDialog::SettingsDialog(QUrl const& url, QString const& user, QString con
 	m_setting_box.setLayout(&m_setting_layout);
 
 	m_vlc_box.setLayout(&m_vlc_layout);
-	m_vlc_layout.addWidget(&m_vlc_host);
-	m_vlc_layout.addWidget(&m_vlc_port);
+	m_vlc_layout.addWidget(&m_vlc_url);
 	m_vlc_layout.addWidget(&m_vlc_user);
 	m_vlc_layout.addWidget(&m_vlc_password);
 
@@ -70,7 +64,7 @@ QString SettingsDialog::vlc_password() const {
 }
 
 QUrl SettingsDialog::vlc_address() const {
-	return "http://" + m_vlc_host.text() + ":" + m_vlc_port.text() + "/requests/status.xml";
+	return m_vlc_url.text();
 }
 
 }
