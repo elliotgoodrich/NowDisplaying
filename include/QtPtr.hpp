@@ -1,3 +1,6 @@
+#ifndef INCLUDE_GUARD_F120CACE_405C_4564_BF99_50B089C76A88
+#define INCLUDE_GUARD_F120CACE_405C_4564_BF99_50B089C76A88
+
 /**
 \file   QtPtr.hpp
 \author Elliot Goodrich
@@ -19,9 +22,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#ifndef INCLUDE_GUARD_F120CACE_405C_4564_BF99_50B089C76A88
-#define INCLUDE_GUARD_F120CACE_405C_4564_BF99_50B089C76A88
 
 #include <QPointer>
 
@@ -79,12 +79,12 @@ public:
 
 	/** Dereference operator. */
 	T& operator*() {
-		return &m_ptr;
+		return *m_ptr;
 	}
 
 	/** Dereference operator. */
 	T const& operator*() const {
-		return &m_ptr;
+		return *m_ptr;
 	}
 
 private:

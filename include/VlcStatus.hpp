@@ -41,12 +41,18 @@ class VlcStatus : public QObject {
 public:
 	VlcStatus(QUrl vlc_address, QString user, QString password);
 
+	void change_details(QUrl vlc_address, QString user, QString password);
+
 	void update();
+
+	QUrl const& address() const;
+	QString const& user() const;
+	QString const& password() const;
 
 	QString title() const;
 	QString artist() const;
 	QString album() const;
-	QString description() const;
+	QString copyright() const;
 
 	QFileInfo album_art() const;
 
@@ -61,7 +67,7 @@ private:
 	QUrl m_url;
 	QString m_user, m_password;
 	QNetworkAccessManager m_manager;
-	QString m_title, m_artist, m_album, m_description;
+	QString m_title, m_artist, m_album, m_copyright;
 	QFileInfo m_album_art;
 	QMutex mutable m_mutex;
 };

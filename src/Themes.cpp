@@ -1,5 +1,5 @@
 /**
-\file   main.cpp
+\file   Themes.cpp
 \author Elliot Goodrich
 
 NowDisplaying - a program to display what music is currently playing.
@@ -20,15 +20,37 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QApplication>
-#include <QPushButton>
+#include "Themes.hpp"
 
-#include "NowDisplayingWindow.hpp"
+#include <QTextStream>
 
-int main(int argc, char **argv)
-{
-	QApplication app{argc, argv};
-	nd::NowDisplayingWindow window{nullptr};
-	window.show();
-	return app.exec();
+namespace nd {
+
+Themes::Themes()
+: m_theme_dir{QDir::currentPath() + "/themes/"}
+, m_filters{"*.theme"} {
+}
+
+QStringList Themes::themes() const {
+	auto const theme_files = m_theme_dir.entryInfoList(m_filters, QDir::Files);
+	QStringList themes;
+	themes.reserve(theme_files.size());
+	for(auto const& theme_file : theme_files) {
+		themes.push_back(theme_file.baseName());
+	}
+	return themes;
+}
+
+QString Themes::stylesheet(QString const& theme) const {
+	QFile file{m_theme_dir.filePath(theme + ".theme")};
+	if(file.exists()) {
+		if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+			QTextStream in(&file);
+			return in.readAll();
+		}
+	}
+	return "";
+}
+
+
 }

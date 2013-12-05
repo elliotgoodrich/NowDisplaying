@@ -1,5 +1,8 @@
+#ifndef INCLUDE_GUARD_17379EA8_845A_4776_831F_87D4EB0E81BF
+#define INCLUDE_GUARD_17379EA8_845A_4776_831F_87D4EB0E81BF
+
 /**
-\file   main.cpp
+\file   Themes.hpp
 \author Elliot Goodrich
 
 NowDisplaying - a program to display what music is currently playing.
@@ -20,15 +23,26 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QApplication>
-#include <QPushButton>
+#include <QDir>
+#include <QStringList>
 
-#include "NowDisplayingWindow.hpp"
+class QString;
 
-int main(int argc, char **argv)
-{
-	QApplication app{argc, argv};
-	nd::NowDisplayingWindow window{nullptr};
-	window.show();
-	return app.exec();
+namespace nd {
+
+class Themes {
+public:
+	Themes();
+
+	QStringList themes() const;
+
+	QString stylesheet(QString const& theme) const;
+
+private:
+	QDir m_theme_dir;
+	QStringList m_filters;
+};
+
 }
+
+#endif

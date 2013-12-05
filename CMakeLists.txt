@@ -10,12 +10,20 @@ set(CMAKE_AUTOMOC ON)
 set(HEADERS
 	include/QtPtr.hpp
 	include/NowDisplayingWindow.hpp
+	include/RightClickMenu.hpp
+	include/Settings.hpp
+	include/SettingsDialog.hpp
+	include/Themes.hpp
 	include/VlcStatus.hpp
 )
 
 set(SOURCES
 	src/main.cpp
 	src/NowDisplayingWindow.cpp
+	src/RightClickMenu.cpp
+	src/Settings.cpp
+	src/SettingsDialog.cpp
+	src/Themes.cpp
 	src/VlcStatus.cpp
 )
 
